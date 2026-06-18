@@ -41,3 +41,6 @@ Each endpoint is fetched once per minute as a master HTTP item; all other items 
 | 5G NR RSRP < -120 dBm | High |
 | Device in roaming | Info |
 | 5G NR PCI changed (cell handover) | Info |
+
+## Screenshot
+![Screenshot](Screenshot.png)
