@@ -1,0 +1,571 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>6.4</version>
+    <template_groups>
+        <template_group>
+            <uuid>ec515458b37f4f24879ec3ccf2982763</uuid>
+            <name>Templates/Network devices</name>
+        </template_group>
+    </template_groups>
+    <templates>
+        <template>
+            <uuid>db80eb47317847baa76f919bfe3ad9a0</uuid>
+            <template>Askey 5G</template>
+            <name>Askey 5G</name>
+            <description>Monitoring template for 5G/LTE device via REST API.</description>
+            <groups>
+                <group>
+                    <name>Templates/Network devices</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>f8e1f16641854afe96cb94082a852db0</uuid>
+                    <name>5G NR: Band</name>
+                    <type>DEPENDENT</type>
+                    <key>lte.5g_band</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <description>Číslo 5G NR pásma.</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.Result.5g_band</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>lte.signal_info.raw</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>5g-rf</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>446b75130bc54d9a86db39d9055477f9</uuid>
+                    <name>5G NR: PCI</name>
+                    <type>DEPENDENT</type>
+                    <key>lte.5g_pci</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <description>Physical Cell ID 5G NR bunky.</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.Result.5g_pci</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>lte.signal_info.raw</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>5g-rf</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>3d4eab0ae14044518f1a4d2181fd3805</uuid>
+                            <expression>change(/Askey 5G/lte.5g_pci)=1</expression>
+                            <name>5G NR: PCI changed (new cell: {ITEM.VALUE})</name>
+                            <priority>INFO</priority>
+                            <description>Zariadenie sa pripojilo na inú 5G bunku (handover).</description>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>5dec4edb73fb47aabf693b0ee82a4018</uuid>
+                    <name>5G NR: RSRP</name>
+                    <type>DEPENDENT</type>
+                    <key>lte.5g_rsrp</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <value_type>FLOAT</value_type>
+                    <trends>90d</trends>
+                    <units>dBm</units>
+                    <description>5G NR RSRP. Dobrý: &gt; -100 dBm, Kritický: &lt; -120 dBm.</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.Result.5g_rsrp</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>lte.signal_info.raw</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>5g-rf</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>831734cb85cf4657825ab0179d75abd7</uuid>
+                            <expression>last(/Askey 5G/lte.5g_rsrp)&lt;-120</expression>
+                            <name>5G NR: RSRP is critically low ({ITEM.VALUE} dBm)</name>
+                            <priority>HIGH</priority>
+                            <description>5G NR RSRP pod -120 dBm.</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>bc8d3765f4574ebead06866244523c86</uuid>
+                    <name>5G NR: RSRQ</name>
+                    <type>DEPENDENT</type>
+                    <key>lte.5g_rsrq</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <value_type>FLOAT</value_type>
+                    <trends>90d</trends>
+                    <units>dB</units>
+                    <description>5G NR RSRQ.</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.Result.5g_rsrq</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>lte.signal_info.raw</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>5g-rf</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>472ea192f47c43319037ef61c7159703</uuid>
+                    <name>5G NR: SINR</name>
+                    <type>DEPENDENT</type>
+                    <key>lte.5g_sinr</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <value_type>FLOAT</value_type>
+                    <trends>90d</trends>
+                    <units>dB</units>
+                    <description>5G NR SINR. Dobrý: &gt; 10 dB.</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.Result.5g_sinr</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>lte.signal_info.raw</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>5g-rf</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>4b494d9542ba4be59d80cb8d77b233e2</uuid>
+                    <name>5G: LTE RSRP</name>
+                    <type>DEPENDENT</type>
+                    <key>lte.lte_rsrp</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <value_type>FLOAT</value_type>
+                    <trends>90d</trends>
+                    <units>dBm</units>
+                    <description>LTE RSRP. Dobrý: &gt; -90 dBm, Kritický: &lt; -110 dBm.</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.Result.lte_rsrp</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>lte.signal_info.raw</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>lte-rf</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>8f9a857aff694729b962f1eb3e66f170</uuid>
+                            <expression>last(/Askey 5G/lte.lte_rsrp)&lt;-110</expression>
+                            <name>5G: LTE RSRP is critically low ({ITEM.VALUE} dBm)</name>
+                            <priority>HIGH</priority>
+                            <description>LTE RSRP pod -110 dBm.</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>f1bffa772dcc4f238d30354351183bec</uuid>
+                    <name>5G: LTE RSRQ</name>
+                    <type>DEPENDENT</type>
+                    <key>lte.lte_rsrq</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <value_type>FLOAT</value_type>
+                    <trends>90d</trends>
+                    <units>dB</units>
+                    <description>LTE RSRQ. Dobrý: &gt; -10 dB.</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.Result.lte_rsrq</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>lte.signal_info.raw</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>lte-rf</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>b8e560d7d1b3446e89faabc311ae1420</uuid>
+                    <name>5G: LTE SINR</name>
+                    <type>DEPENDENT</type>
+                    <key>lte.lte_sinr</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <value_type>FLOAT</value_type>
+                    <trends>90d</trends>
+                    <units>dB</units>
+                    <description>LTE SINR. Vyšší = lepší.</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.Result.lte_sinr</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>lte.signal_info.raw</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>lte-rf</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>1c1ddab9c53b42e8a79d3765b58ae942</uuid>
+                    <name>5G: Network operator (PLMN)</name>
+                    <type>DEPENDENT</type>
+                    <key>lte.plmn_name</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>Meno operátora (napr. Telekom).</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.Result.plmn_name</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>lte.status_info.raw</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>5g</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>cad9793deed64de297002d53ba35adf2</uuid>
+                    <name>5G: Roaming status</name>
+                    <type>DEPENDENT</type>
+                    <key>lte.roam_status</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <description>0 = domáca sieť, 1 = roaming.</description>
+                    <valuemap>
+                        <name>Roaming status</name>
+                    </valuemap>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.Result.roam_status</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>lte.status_info.raw</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>sim</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>8733050f0d964e36b81224df077fdbf9</uuid>
+                            <expression>last(/Askey 5G/lte.roam_status)=1</expression>
+                            <name>5G: Device is in ROAMING</name>
+                            <priority>INFO</priority>
+                            <description>Zariadenie je v roamingu.</description>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>notice</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>f035e3c7062a473c9ce8a9c44c3a993e</uuid>
+                    <name>5G: Raw signal_info JSON</name>
+                    <type>HTTP_AGENT</type>
+                    <key>lte.signal_info.raw</key>
+                    <delay>60s</delay>
+                    <history>1d</history>
+                    <value_type>TEXT</value_type>
+                    <trends>0</trends>
+                    <description>Master item – RF parametre LTE aj 5G.</description>
+                    <url>http://{HOST.CONN}/restful/lte/signal_info</url>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>signal</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>1ef28eb27ba34c90bf1973545043d976</uuid>
+                    <name>5G: Signal level</name>
+                    <type>DEPENDENT</type>
+                    <key>lte.signal_level</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <trends>90d</trends>
+                    <description>Úroveň signálu 0–5.</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.Result.signal_level</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>IN_RANGE</type>
+                            <parameters>
+                                <parameter>0</parameter>
+                                <parameter>5</parameter>
+                            </parameters>
+                            <error_handler>DISCARD_VALUE</error_handler>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>lte.status_info.raw</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>signal</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>2fc2d10476ac4568a0dbfea993061c64</uuid>
+                            <expression>last(/Askey 5G/lte.signal_level)&lt;=1</expression>
+                            <name>5G: Signal level is CRITICAL ({ITEM.VALUE}/5)</name>
+                            <priority>HIGH</priority>
+                            <description>Signál je kriticky slabý (≤ 1/5).</description>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                        <trigger>
+                            <uuid>0cefd02116db44b1955287262753caa4</uuid>
+                            <expression>last(/Askey 5G/lte.signal_level)&lt;3 and last(/Askey 5G/lte.signal_level)&gt;1</expression>
+                            <name>5G: Signal level is LOW ({ITEM.VALUE}/5)</name>
+                            <priority>WARNING</priority>
+                            <description>Signál je slabý (&lt; 3/5).</description>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>18c8afee902d47088b56915813f09b58</uuid>
+                    <name>5G: SIM status</name>
+                    <type>DEPENDENT</type>
+                    <key>lte.sim_status</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <description>SIM karta: 1 = aktívna, 0 = chýba/chyba.</description>
+                    <valuemap>
+                        <name>SIM status</name>
+                    </valuemap>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.Result.sim_status</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>lte.status_info.raw</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>sim</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>abaf7e323a314170838f89f1e1808089</uuid>
+                            <expression>last(/Askey 5G/lte.sim_status)&lt;&gt;1</expression>
+                            <name>5G: SIM card is not ready (status: {ITEM.VALUE})</name>
+                            <priority>HIGH</priority>
+                            <description>SIM karta nie je pripravená alebo chýba.</description>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>availability</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>e30dafd90bd24e24a748893e34f3e3ba</uuid>
+                    <name>5G: Raw status_info JSON</name>
+                    <type>HTTP_AGENT</type>
+                    <key>lte.status_info.raw</key>
+                    <delay>60s</delay>
+                    <history>1d</history>
+                    <value_type>TEXT</value_type>
+                    <trends>0</trends>
+                    <description>Master item – stiahne JSON zo status_info endpointu.</description>
+                    <url>http://{HOST.CONN}/restful/lte/status_info</url>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>5g</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>6ca89b734f9f454f926042bc1bc5c1cb</uuid>
+                    <name>5G: Technology status</name>
+                    <type>DEPENDENT</type>
+                    <key>lte.tech_status</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>Technológia pripojenia: LTE, 5G_NSA, 5G_SA, atď.</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.Result.tech_status</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>lte.status_info.raw</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>5g</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>709d45a40eae4743ace321cf54670cf6</uuid>
+                            <expression>find(/Askey 5G/lte.tech_status,,&quot;like&quot;,&quot;5G&quot;)=0</expression>
+                            <name>5G: Device is NOT connected via 5G (current: {ITEM.VALUE})</name>
+                            <priority>WARNING</priority>
+                            <description>Zariadenie nie je pripojené cez 5G. Aktuálna technológia: {ITEM.VALUE}</description>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>availability</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <valuemaps>
+                <valuemap>
+                    <uuid>4ad48b2e318c491abfcf81f5bc0383a7</uuid>
+                    <name>Roaming status</name>
+                    <mappings>
+                        <mapping>
+                            <value>0</value>
+                            <newvalue>Home network</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>Roaming</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+                <valuemap>
+                    <uuid>895636e16f804b4188d87da94b9c4ce8</uuid>
+                    <name>SIM status</name>
+                    <mappings>
+                        <mapping>
+                            <value>0</value>
+                            <newvalue>Not ready</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>Ready</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+            </valuemaps>
+        </template>
+    </templates>
+</zabbix_export>
